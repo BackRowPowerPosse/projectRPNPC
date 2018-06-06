@@ -258,11 +258,10 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::parse()
 	{
-		string input; 
-		m_instrStream ;
+		string input = m_instrStream.str();
 
 		/*
-		check if input is a number
+		check if  is a number
 		if not a number:
 			check for all possible commands
 		*/
@@ -606,7 +605,7 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::getReg(int reg)
 	{
-		m_stack.push_back(m_registers[reg]);
+		m_stack.push_front(m_registers[reg]);
 	}  
 
 //----------------------------------------------------------------------------
@@ -781,12 +780,16 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/6/2018 AS updated
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::neg()
 	{
-		
+		double temp = -1 * m_stack.front();
+
+		m_stack.pop_front();
+
+		m_stack.push_front(temp);
 	}
 
 //----------------------------------------------------------------------------
@@ -1069,7 +1072,7 @@ namespace BRPP_CALC
 	{	
 		if (!m_stack.empty())
 		{
-			m_registers[reg] = m_stack.back();
+			m_registers[reg] = m_stack.front();
 		}
 		else
 			cout << "<<error>>";
@@ -1151,13 +1154,15 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/6/2018 CS AM AS updated
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::input(istream &istr)
 	{
-
-	} 
+		istr >> m_buffer;
+		m_instrStream.str(m_buffer);
+		parse();
+	}
 
 //----------------------------------------------------------------------------
 //	Function:
