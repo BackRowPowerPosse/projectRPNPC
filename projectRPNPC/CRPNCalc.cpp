@@ -35,7 +35,6 @@
 //		bool m_on
 //		bool m_programRunning
 //	
-//
 //	Methods:
 //		CRPNCalc(bool on = true)
 //		void run()
@@ -65,6 +64,8 @@
 //	Related functions:
 //		ostream &operator<<(ostream &ostr, const CRPNCalc &calc)
 //    	istream &operator>>(istream &istr, CRPNCalc &calc)
+//		void printLine(ostream &ostr)
+//		void printMenu(ostream &ostr)
 //
 //	History Log:
 //                           
@@ -74,39 +75,39 @@ namespace BRPP_CALC
 {
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		CRPNCalc()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Initializes properties that need initializing, sets all of the
+//		registers to 0.0, and if the property "m_on" is set to "true", calls
+//		run().
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		A switch to turn on the calculator
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		run()
 //
 //	Called By:
 //		main()
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		bool on
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
-	CRPNCalc::CRPNCalc(bool on): m_on(on), m_error(false), m_helpOn(true),
+	CRPNCalc::CRPNCalc(bool on) : m_on(on), m_error(false), m_helpOn(true),
 		m_programRunning(false)
 	{
 		for (int i = 0; i < NUMREGS; i++)
@@ -118,75 +119,76 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		run()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Sets the calculator running.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		CRPNCalc()
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::run()
 	{
-	
+		
 	} 
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		print()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Prints the identifying line, the help menu if "m_helpOn" is "true",
+//		the element at the top of the stack if it is not empty, and
+//		"<<error>>" if "m_error" is "true" (then sets "m_error" to "false").
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		The output stream for printing
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		printMenu()
+//		printLine()
+//		empty()
+//		front()
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		ostream &ostr
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::print(ostream &ostr)
@@ -197,11 +199,11 @@ namespace BRPP_CALC
 			<< endl;
 
 		if (m_helpOn)
-			cout << helpMenu;
+			printMenu(cout);
 		else
 			cout << endl << endl << endl;
 
-		cout << line;
+		printLine(cout);
 
 		if (!m_stack.empty())
 		{
@@ -220,36 +222,34 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		parse()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Extracts and executes the commands that are in "m_instrStream".  
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::parse()
@@ -259,153 +259,149 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		add()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		If possible, pops two elements from the stack, adds them and pushes
+//		the result onto the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------	
 	void CRPNCalc::add()
 	{
-
+		
 	} 
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		binary_prep()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Sets the arguments to the popped values from the stack, if possible.
+//		Sets an error state otherwise.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		Two references to numbers
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		double &d1
+//		double &d2
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::binary_prep(double &d1, double &d2)
 	{
-	
+		
 	} 
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		clearEntry()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Removes one element from the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::clearEntry()
 	{
-	
+		
 	} 
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		clearAll()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Empties the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		empty()
+//		pop_front()
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::clearAll()
@@ -416,36 +412,35 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		divide()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		If possible, pops two elements from the stack, divides them and pushes
+//		the result onto the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::divide()
@@ -455,309 +450,299 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		exp()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		If possible, pops two elements from the stack, raises one element to
+//		the other power and pushes the result onto the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::exp()
 	{
-
+		
 	}  
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		getReg()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Pushes the given register's value onto the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		The register to be pushed
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		int reg
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::getReg(int reg)
 	{
-	
+		
 	}  
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		loadProgram()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Retrieves the filename from the user and loads it into "m_program".
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::loadProgram()
 	{
-	
+		
 	}  
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		mod()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		If possible, pops two elements from the stack, finds the result of
+//		first number modulos the second number, and pushes the result onto the
+//		stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::mod()
 	{
-	
+		
 	}
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		multiply()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		If possible, pops two elements from the stack, multiplies them
+//		and pushes the result onto the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::multiply()
 	{
-	
+		
 	}
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		neg()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Resets the top element of the stack to it's negative.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::neg()
 	{
-	   
+		
 	}
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		unary_prep()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Sets the arguments to the popped value from the stack, if possible.
+//		Sets an error state otherwise.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		One reference to a number
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		double &d
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::unary_prep(double &d)
 	{
-	
+		
 	}  
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		recordProgram()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Takes command-line input and loads it into "m_program".
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::recordProgram()
@@ -767,75 +752,71 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		rotateDown()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Removes the bottom of the stack and adds it to the top.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::rotateDown()
 	{
-	
+		
 	} 
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		rotateUp()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Removes the top of the stack and adds it to the bottom.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::rotateUp()
@@ -845,36 +826,34 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		runProgram()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Runs the program in "m_program".
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::runProgram()
@@ -884,36 +863,34 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		saveToFile()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Asks the user for a filename and saves "m_program" to that file.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::saveToFile()
@@ -923,36 +900,35 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		setReg()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Gets the value from the top of the stack and places it into the given
+//		register.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		The register to be set
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		int reg
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::setReg(int reg)
@@ -962,36 +938,35 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		subtract()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		If possible, pops two elements from the stack, subtracts them, and
+//		pushes the result onto the stack.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::subtract()
@@ -1001,36 +976,34 @@ namespace BRPP_CALC
 
 //----------------------------------------------------------------------------
 //	Class:
-//		CDLL
+//		CRPNCalc
 //
 //	Method:
-//		CDLL(size_t n_elements, T datum)
+//		input()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Inputs a line from the given stream.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		None
 //
 //	Output:
 //		None
 //
 //	Calls:
-//		push_front()
+//		N/A
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		None
 //
 //	Returns:
 //		None
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::input(istream &istr)
@@ -1039,37 +1012,34 @@ namespace BRPP_CALC
 	} 
 
 //----------------------------------------------------------------------------
-//	Class:
-//		CDLL
-//
-//	Method:
-//		CDLL(size_t n_elements, T datum)
+//	Function:
+//		operator<<()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Prints the calculator interface.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		The output stream for insertion and a reference to the calculator
+//		object for printing.
 //
 //	Output:
-//		None
+//		The chosen output stream
 //
 //	Calls:
-//		push_front()
+//		print()
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		ostream &ostr
+//		CRPNCalc &calc
 //
 //	Returns:
-//		None
+//		ostream &
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	ostream &operator<<(ostream &ostr, CRPNCalc &calc)
@@ -1080,43 +1050,116 @@ namespace BRPP_CALC
 	} 
 
 //----------------------------------------------------------------------------
-//	Class:
-//		CDLL
-//
-//	Method:
-//		CDLL(size_t n_elements, T datum)
+//	Function:
+//		operator>>()
 //
 //	Description:
-//		Constructor for a particular amount of an element. Throws an exception
-//		for an empty list.
+//		Inputs a line from the given input stream.
 //
 //	Input:
-//		Size of the array and element to be filled with
+//		The input stream for extraction and a reference to the calculator
+//		object for inputting.
 //
 //	Output:
-//		None
+//		The chosen input stream
 //
 //	Calls:
-//		push_front()
+//		input()
 //
 //	Called By:
-//		main()
+//		N/A
 //
 //	Parameters:
-//		size_t n_elements
-//		T datum
+//		istream &istr
+//		CRPNCalc &calc
 //
 //	Returns:
-//		None
+//		istream &
 //
 //	History Log:
-//		05/22/2018 AS Method completed
+//		N/A
 //
 //----------------------------------------------------------------------------
 	istream &operator>>(istream &istr, CRPNCalc &calc)
 	{
 		calc.input(istr);
-
+		
 		return istr;
-	} 
+	}
+
+//----------------------------------------------------------------------------
+//	Function:
+//		printLine()
+//
+//	Description:
+//		Prints a line.
+//
+//	Input:
+//		The output stream for printing
+//
+//	Output:
+//		A single line
+//
+//	Calls:
+//		None
+//
+//	Called By:
+//		print()
+//
+//	Parameters:
+//		ostream &ostr
+//
+//	Returns:
+//		ostream &
+//
+//	History Log:
+//		06/04/2018 BRRP Function completed
+//
+//----------------------------------------------------------------------------
+	void printLine(ostream &ostr)
+	{
+		for (unsigned short i = 1; i <= 76; i++)
+			ostr << '_';
+
+		ostr << endl;
+	}
+
+//----------------------------------------------------------------------------
+//	Function:
+//		printMenu()
+//
+//	Description:
+//		Prints the calculator's help menu.
+//
+//	Input:
+//		The output stream for printing
+//
+//	Output:
+//		The help menu.
+//
+//	Calls:
+//		None
+//
+//	Called By:
+//		print()
+//
+//	Parameters:
+//		ostream &ostr
+//
+//	Returns:
+//		None
+//
+//	History Log:
+//		N/A
+//
+//----------------------------------------------------------------------------
+	void printMenu(ostream &ostr)
+	{
+		ostr << "C Clear stack   | CE Clear entry  | D Rotate down | "
+			"F Save program to file" << endl;
+		ostr << "G0-G9 Get reg N | H Help on/off   | L Load program | "
+			"M +/- | P Program on/off" << endl;
+		ostr << "R Run program   | S0-S9 Set reg n | U Rotate up    | X Exit"
+			<< endl;
+	}
 }

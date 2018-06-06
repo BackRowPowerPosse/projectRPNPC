@@ -6,8 +6,6 @@
 //		int main()
 //----------------------------------------------------------------------------
 
-#include <cstdlib>
-#include <iostream>
 #include "CRPNCalc.h"
 
 using namespace BRPP_CALC;
@@ -36,10 +34,10 @@ using namespace BRPP_CALC;
 //		CRPNCalc()
 // 
 //	Returns:
-//		int EXIT_SUCCESS (1)
+//		int
 //
 //	History Log:
-//		4/205/14 PB completed version 1.0
+//		4/?/14 PB completed version 1.0
 //
 //----------------------------------------------------------------------------
 int main()
