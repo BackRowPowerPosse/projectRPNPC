@@ -254,7 +254,18 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::parse()
 	{
+		string input; 
+		m_instrStream ;
 
+		/*
+		check if input is a number
+		if not a number:
+			check for all possible commands
+		*/
+		if ()
+		{
+
+		}
 	}
 
 //----------------------------------------------------------------------------
@@ -293,7 +304,16 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------	
 	void CRPNCalc::add()
 	{
+		double numOne;
+		double numTwo;
+		/*
+		call binary_prep()
+		check for m_error
+		*/
+		binary_prep(numOne, numTwo);
 
+		if (!m_error)
+			m_stack.push_front(numOne + numTwo);
 	} 
 
 //----------------------------------------------------------------------------
@@ -332,7 +352,35 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::binary_prep(double &d1, double &d2)
 	{
-	
+	/*
+	check if m_stack is empty
+	else
+		pop number off of stack
+	*/
+		if (m_stack.empty())
+		{
+			m_error = true;
+			cout << "Queue is empty.";
+		}
+		else
+		{
+			d1 = m_stack.back(); //FIFO -- back of Queue is first number
+			m_stack.pop_back();
+		}
+
+		//check for 2nd number
+		if (m_stack.empty())
+		{
+			m_error = true;
+			cout << "Only one number in Queue.";
+		}
+		else
+		{
+			d2 = m_stack.back(); //FIFO -- back of Queue is second number
+			m_stack.pop_back();
+		}
+			
+
 	} 
 
 //----------------------------------------------------------------------------
@@ -450,7 +498,26 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::divide()
 	{
+		/*
+		if numTwo is 0, 
+		set m_error = true; 
+		(cannot divide or mod by 0, causes undefined behavior)
+		*/
+		double numOne;
+		double numTwo;
+		/*
+		call binary_prep()
+		check for m_error
+		*/
+		binary_prep(numOne, numTwo);
 
+		if (numTwo == 0)
+		{
+			m_error = true;
+			cout << "Cannot divide by 0.";
+		}
+		if (!m_error)
+			m_stack.push_front(numOne/numTwo);
 	} 
 
 //----------------------------------------------------------------------------
@@ -489,7 +556,21 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::exp()
 	{
+		/*
+		if numTwo is 0,
+		set m_error = true;
+		(cannot divide or mod by 0, causes undefined behavior)
+		*/
+		double numOne;
+		double numTwo;
+		/*
+		call binary_prep()
+		check for m_error
+		*/
+		binary_prep(numOne, numTwo);
 
+		if (!m_error)
+			m_stack.push_front(pow(numOne, numTwo));
 	}  
 
 //----------------------------------------------------------------------------
@@ -606,7 +687,27 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::mod()
 	{
-	
+		/*
+		if numTwo is 0,
+		set m_error = true;
+		(cannot divide or mod by 0, causes undefined behavior)
+		uses fmod to do mod operation on doubles
+		*/
+		double numOne;
+		double numTwo;
+		/*
+		call binary_prep()
+		check for m_error
+		*/
+		binary_prep(numOne, numTwo);
+
+		if (numTwo == 0)
+		{
+			m_error = true;
+			cout << "Cannot mod by 0.";
+		}
+		if (!m_error)
+			m_stack.push_front(fmod(numOne, numTwo));
 	}
 
 //----------------------------------------------------------------------------
@@ -645,7 +746,16 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::multiply()
 	{
-	
+		double numOne;
+		double numTwo;
+		/*
+		call binary_prep()
+		check for m_error
+		*/
+		binary_prep(numOne, numTwo);
+
+		if (!m_error)
+			m_stack.push_front(numOne * numTwo);
 	}
 
 //----------------------------------------------------------------------------
@@ -723,7 +833,17 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::unary_prep(double &d)
 	{
-	
+
+		if (m_stack.empty())
+		{
+			m_error = true;
+			cout << "Queue is empty.";
+		}
+		else
+		{
+			d = m_stack.back(); //FIFO -- back of Queue is first number
+			m_stack.pop_back();
+		}
 	}  
 
 //----------------------------------------------------------------------------
@@ -801,7 +921,12 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::rotateDown()
 	{
-	
+		/*
+		remove first element, place it at the back
+		*/
+		double front = m_stack.front();
+		m_stack.pop_front();
+		m_stack.push_back(front);
 	} 
 
 //----------------------------------------------------------------------------
@@ -840,7 +965,12 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::rotateUp()
 	{
-	
+		/*
+		remove last element, place it at the front
+		*/
+		double back = m_stack.back();
+		m_stack.pop_back();
+		m_stack.push_front(back);
 	} 
 
 //----------------------------------------------------------------------------
@@ -879,7 +1009,7 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::runProgram()
 	{
-	
+	//while m_on.....
 	} 
 
 //----------------------------------------------------------------------------
@@ -996,7 +1126,16 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::subtract()
 	{
+		double numOne;
+		double numTwo;
+		/*
+		call binary_prep()
+		check for m_error
+		*/
+		binary_prep(numOne, numTwo);
 
+		if (!m_error)
+			m_stack.push_front(numOne - numTwo);
 	} 
 
 //----------------------------------------------------------------------------
