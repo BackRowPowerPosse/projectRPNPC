@@ -516,12 +516,12 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/5/2018 CS updated
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::getReg(int reg)
 	{
-		
+		m_stack.push_back(m_registers[reg]);
 	}  
 
 //----------------------------------------------------------------------------
@@ -928,12 +928,17 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/5/2018 CS updated
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::setReg(int reg)
-	{
-			
+	{	
+		if (!m_stack.empty())
+		{
+			m_registers[reg] = m_stack.back();
+		}
+		else
+			cout << "<<error>>";
 	} 
 
 //----------------------------------------------------------------------------
