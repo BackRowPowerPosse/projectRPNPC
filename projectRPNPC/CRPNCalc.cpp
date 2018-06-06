@@ -865,12 +865,22 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/6/2018
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::recordProgram()
 	{
-
+		int lineNum = 0;
+		string temp;
+		while (temp.find('P') != std::string::npos && 
+			temp.find('p') != std::string::npos)
+		{
+			cout << lineNum++ << ">";
+			cin >> temp;
+			m_program.push_back(temp);
+		}
+		system("cls");
+		printMenu(cout);
 	} 
 
 //----------------------------------------------------------------------------
@@ -1028,7 +1038,18 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::saveToFile()
 	{
-			
+		string temp;
+		cout << "Enter filename of saved program: ";
+		cin >> temp;
+		temp = temp.append(".txt");
+		ofstream outFile;
+		outFile.open(temp);
+		while (!m_program.empty())
+		{
+			outFile << m_program.front() << endl;
+			m_program.pop_front();
+		}
+		outFile.close();
 	}  
 
 //----------------------------------------------------------------------------
