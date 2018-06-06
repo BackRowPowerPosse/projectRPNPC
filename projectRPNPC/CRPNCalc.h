@@ -24,15 +24,6 @@ using namespace std;
 
 namespace BRPP_CALC
 {
-	const char helpMenu[] =
-		"C Clear stack   | CE Clear entry  | D Rotate down  "
-			"| F Save program to file\n"
-		"G0-G9 Get reg n | H Help on/off   | L Load program | M +/- "
-			"| P Program on/off\n"
-		"R Run program   | S0-S9 Set reg n | U Rotate up    | X Exit\n";
-	const char line[] =
-		"____________________________________________________________________"
-			"________\n";
 	const unsigned short NUMREGS = 10;
 
 //----------------------------------------------------------------------------
@@ -138,4 +129,6 @@ namespace BRPP_CALC
 
 	ostream &operator<<(ostream &ostr, CRPNCalc &calc);
 	istream &operator>>(istream &istr, CRPNCalc &calc);
+	void printLine(ostream &ostr);
+	void printMenu(ostream &ostr);
 }
