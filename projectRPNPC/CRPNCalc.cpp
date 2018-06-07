@@ -258,18 +258,17 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::parse()
 	{
-		string input; 
-		m_instrStream ;
+		string input = m_instrStream.str();
 
 		/*
-		check if input is a number
+		check if  is a number
 		if not a number:
 			check for all possible commands
 		*/
-		if ()
+	/*	if ()
 		{
 
-		}
+		}*/
 	}
 
 //----------------------------------------------------------------------------
@@ -606,7 +605,7 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::getReg(int reg)
 	{
-		m_stack.push_back(m_registers[reg]);
+		m_stack.push_front(m_registers[reg]);
 	}  
 
 //----------------------------------------------------------------------------
@@ -781,12 +780,16 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/6/2018 AS updated
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::neg()
 	{
-		
+		double temp = -1 * m_stack.front();
+
+		m_stack.pop_front();
+
+		m_stack.push_front(temp);
 	}
 
 //----------------------------------------------------------------------------
@@ -866,12 +869,30 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/6/2018
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::recordProgram()
 	{
-
+		int lineNum = 0;
+		string temp;
+		size_t found_p = string::npos;
+		size_t found_P = string::npos;
+		do
+		{
+			cout << lineNum++ << ">";
+			cin >> temp;
+			found_p = temp.find('p');
+			found_P = temp.find('P');
+			if (found_p != -1)
+				temp.erase(found_p);
+			if (found_P != -1)
+				temp.erase(found_P);	
+			m_program.push_back(temp);
+		} while (found_p == -1 &&
+			found_P == -1);
+		system("cls");
+		printMenu(cout);
 	} 
 
 //----------------------------------------------------------------------------
@@ -1024,12 +1045,23 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		CS updated 6/6/2018
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::saveToFile()
 	{
-			
+		string temp;
+		cout << "Enter filename of saved program: ";
+		cin >> temp;
+		temp = temp.append(".txt");
+		ofstream outFile;
+		outFile.open(temp);
+		while (!m_program.empty())
+		{
+			outFile << m_program.front() << endl;
+			m_program.pop_front();
+		}
+		outFile.close();
 	}  
 
 //----------------------------------------------------------------------------
@@ -1069,7 +1101,7 @@ namespace BRPP_CALC
 	{	
 		if (!m_stack.empty())
 		{
-			m_registers[reg] = m_stack.back();
+			m_registers[reg] = m_stack.front();
 		}
 		else
 			cout << "<<error>>";
@@ -1151,13 +1183,15 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
+//		6/6/2018 CS AM AS updated
 //
 //----------------------------------------------------------------------------
 	void CRPNCalc::input(istream &istr)
 	{
-
-	} 
+		istr >> m_buffer;
+		m_instrStream.str(m_buffer);
+		parse();
+	}
 
 //----------------------------------------------------------------------------
 //	Function:
