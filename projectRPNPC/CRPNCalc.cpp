@@ -261,10 +261,10 @@ namespace BRPP_CALC
 		if not a number:
 			check for all possible commands
 		*/
-		if ()
+	/*	if ()
 		{
 
-		}
+		}*/
 	}
 
 //----------------------------------------------------------------------------
@@ -872,13 +872,21 @@ namespace BRPP_CALC
 	{
 		int lineNum = 0;
 		string temp;
-		while (temp.find('P') != std::string::npos && 
-			temp.find('p') != std::string::npos)
+		size_t found_p = string::npos;
+		size_t found_P = string::npos;
+		do
 		{
 			cout << lineNum++ << ">";
 			cin >> temp;
+			found_p = temp.find('p');
+			found_P = temp.find('P');
+			if (found_p != -1)
+				temp.erase(found_p);
+			if (found_P != -1)
+				temp.erase(found_P);	
 			m_program.push_back(temp);
-		}
+		} while (found_p == -1 &&
+			found_P == -1);
 		system("cls");
 		printMenu(cout);
 	} 
