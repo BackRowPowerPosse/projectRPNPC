@@ -265,10 +265,115 @@ namespace BRPP_CALC
 		if not a number:
 			check for all possible commands
 		*/
-	/*	if ()
+		string inputString = m_instrStream.str();
+		m_error = false;
+		string numberInput;
+		string commandInput;
+		string::iterator sit = inputString.begin();
+		while (sit != inputString.end())
 		{
+			//check for negative
 
-		}*/
+			while (isdigit(*sit))
+			{
+				numberInput.push_back(*sit);
+			}
+			double number;
+			stringstream input(numberInput);
+			input >> number;
+			m_stack.push_front(number);
+			//check for commands
+			if (inputString.length() == 1)
+			{
+				while (isalpha(*sit))
+				{
+					commandInput.push_back(*sit);
+				}
+				char command = commandInput.front();
+				switch (tolower(command))
+				{
+				case 'c':
+					//clear stack
+					cout << "Clearing stack...";
+					clearAll();
+					break;
+				case 'd':
+					cout << "Rotating stack down...";
+					rotateDown();
+					break;
+				case 'f':
+					saveToFile();
+					break;
+				case 'h':
+					m_helpOn = true;
+					break;
+				case 'l':
+					loadProgram();
+					break;
+				case 'r':
+					runProgram();
+					break;
+				case 'm':
+					neg();
+					break;
+				case 'p':
+					recordProgram();
+				case 'x':
+					m_on = false;
+				case '+':
+					add();
+					break;
+				case '-':
+					subtract();
+				case '/':
+					divide();
+					break;
+				case '*':
+					multiply();
+					break;
+				case '%':
+					mod();
+					break;
+				case '^':
+					exp();
+					break;
+				default:
+					//not valid
+					break;
+				}
+			}
+			//check for operators
+			if (inputString.length == 2)
+			{
+				int numberCommand;
+				//check for register/clear entry
+				while (isalpha(*sit))
+				{
+					commandInput.push_back(*sit);
+				}
+				if (isdigit(*sit))
+				{
+					numberInput.push_back(*sit);
+					stringstream input(numberInput);
+					input >> numberCommand;
+				}
+				char command = commandInput.front();
+				switch (tolower(command))
+				{
+				case 's':
+					//setreg
+					cout << "Set reg....";
+					setReg(numberCommand);
+					break;
+				case 'g':
+					cout << "Get reg...";
+					getReg(numberCommand);
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 
 //----------------------------------------------------------------------------
