@@ -153,6 +153,7 @@ namespace BRPP_CALC
 	{
 		while (m_on)
 		{
+			system("cls");
 			print(cout);
 			input(cin);
 		}
@@ -524,7 +525,8 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::clearEntry()
 	{
-		
+		if (!m_stack.empty())
+			m_stack.pop_front();
 	} 
 
 //----------------------------------------------------------------------------
