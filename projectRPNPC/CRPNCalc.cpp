@@ -153,8 +153,9 @@ namespace BRPP_CALC
 	{
 		while (m_on)
 		{
+			system("cls");
 			print(cout);
-			input(cin);
+         	cin >> *this;
 		}
 	} 
 
@@ -258,119 +259,116 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::parse()
 	{
-		string input = m_instrStream.str();
-
 		/*
 		check if  is a number
 		if not a number:
-			check for all possible commands
+		check for all possible commands
 		*/
 		string inputString = m_instrStream.str();
 		m_error = false;
-		string numberInput;
-		string commandInput;
-		string::iterator sit = inputString.begin();
-		while (sit != inputString.end())
-		{
-			//check for negative
+		bool number;
 
-			while (isdigit(*sit))
-			{
-				numberInput.push_back(*sit);
-			}
-			double number;
-			stringstream input(numberInput);
-			input >> number;
-			m_stack.push_front(number);
-			//check for commands
+		try
+		{
+			m_stack.push_front(stod(inputString));
+			number = true;
+		}
+		catch (const std::exception&)
+		{
+			number = false;
+		}
+
+		//check for commands
+		if (number == false)
+		{
+
 			if (inputString.length() == 1)
 			{
-				while (isalpha(*sit))
-				{
-					commandInput.push_back(*sit);
-				}
-				char command = commandInput.front();
-				switch (tolower(command))
-				{
-				case 'c':
-					//clear stack
-					cout << "Clearing stack...";
-					clearAll();
-					break;
-				case 'd':
-					cout << "Rotating stack down...";
-					rotateDown();
-					break;
-				case 'f':
-					saveToFile();
-					break;
-				case 'h':
-					m_helpOn = true;
-					break;
-				case 'l':
-					loadProgram();
-					break;
-				case 'r':
-					runProgram();
-					break;
-				case 'm':
-					neg();
-					break;
-				case 'p':
-					recordProgram();
-				case 'x':
-					m_on = false;
-				case '+':
-					add();
-					break;
-				case '-':
-					subtract();
-				case '/':
-					divide();
-					break;
-				case '*':
-					multiply();
-					break;
-				case '%':
-					mod();
-					break;
-				case '^':
-					exp();
-					break;
-				default:
-					//not valid
-					break;
-				}
+					switch (tolower(inputString.front()))
+					{
+					case 'c':
+						//clear stack
+						cout << "Clearing stack...";
+						clearAll();
+						break;
+					case 'd':
+						cout << "Rotating stack down...";
+						rotateDown();
+						break;
+					case 'f':
+						saveToFile();
+						break;
+					case 'h':
+						m_helpOn = true;
+						break;
+					case 'l':
+						loadProgram();
+						break;
+					case 'r':
+						runProgram();
+						break;
+					case 'm':
+						neg();
+						break;
+					case 'p':
+						recordProgram();
+					case 'x':
+						m_on = false;
+					case '+':
+						add();
+						break;
+					case '-':
+						subtract();
+						break;
+					case '/':
+						divide();
+						break;
+					case '*':
+						multiply();
+						break;
+					case '%':
+						mod();
+						break;
+					case '^':
+						exp();
+						break;
+					default:
+						//not valid command
+						m_error = true;
+						cout << "Uknown command";
+						break;
+					}
 			}
 			//check for operators
-			if (inputString.length == 2)
+			else if (inputString.length() == 2)
 			{
-				int numberCommand;
 				//check for register/clear entry
-				while (isalpha(*sit))
+
+				if ((isalpha(inputString.front())) && isdigit(inputString.back()))
 				{
-					commandInput.push_back(*sit);
+					switch (tolower(inputString.front()))
+					{
+					case 's':
+						//setreg
+						cout << "Set reg....";
+						setReg(inputString.back());
+						break;
+					case 'g':
+						cout << "Get reg...";
+						getReg(inputString.back());
+						break;
+					default:
+						cout << "Unknown command";
+						m_error = true;
+						break;
+					}
 				}
-				if (isdigit(*sit))
+				if (inputString.front() == 'c' && inputString.back() == 'e')
+					clearEntry();
+				else
 				{
-					numberInput.push_back(*sit);
-					stringstream input(numberInput);
-					input >> numberCommand;
-				}
-				char command = commandInput.front();
-				switch (tolower(command))
-				{
-				case 's':
-					//setreg
-					cout << "Set reg....";
-					setReg(numberCommand);
-					break;
-				case 'g':
-					cout << "Get reg...";
-					getReg(numberCommand);
-					break;
-				default:
-					break;
+					m_error = true;
+					cout << "Unkown command";
 				}
 			}
 		}
