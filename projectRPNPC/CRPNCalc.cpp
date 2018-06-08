@@ -153,6 +153,7 @@ namespace BRPP_CALC
 	{
 		while (m_on)
 		{
+			system("cls");
 			print(cout);
 			input(cin);
 		}
