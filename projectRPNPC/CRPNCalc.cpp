@@ -638,19 +638,20 @@ namespace BRPP_CALC
 //
 //	History Log:
 //		6/8/2018 CS updated
-//
+//		6/8/2018 AS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::loadProgram()
 	{
-		cout << "Enter name of file to load:";
 		string temp;
-		cin >> temp;
 		ifstream inFile;
+
+		cout << "Enter name of file to load: ";
+		cin >> temp;
 		inFile.open(temp);
-		while (inFile.peek() != EOF) {
-			getline(inFile, temp);
+
+		while (getline(inFile, temp))
 			m_program.push_back(temp);
-		}
+
 		inFile.close();
 	}  
 
