@@ -275,6 +275,7 @@ namespace BRPP_CALC
 		}
 		catch (const std::exception&)
 		{
+			//input is not a number
 			number = false;
 		}
 
@@ -294,6 +295,10 @@ namespace BRPP_CALC
 					case 'd':
 						cout << "Rotating stack down...";
 						rotateDown();
+						break;
+					case 'u':
+						cout << "Rotating stack up.";
+						rotateUp();
 						break;
 					case 'f':
 						saveToFile();
@@ -345,6 +350,10 @@ namespace BRPP_CALC
 			{
 				//check for register/clear entry
 
+
+				if (inputString.front() == 'c' && inputString.back() == 'e')
+					clearEntry();
+
 				if ((isalpha(inputString.front())) && isdigit(inputString.back()))
 				{
 					switch (tolower(inputString.front()))
@@ -364,13 +373,7 @@ namespace BRPP_CALC
 						break;
 					}
 				}
-				if (inputString.front() == 'c' && inputString.back() == 'e')
-					clearEntry();
-				else
-				{
-					m_error = true;
-					cout << "Unkown command";
-				}
+
 			}
 		}
 	}
@@ -523,7 +526,7 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::clearEntry()
 	{
-		
+		m_stack.pop_front();
 	} 
 
 //----------------------------------------------------------------------------
@@ -1036,6 +1039,8 @@ namespace BRPP_CALC
 		/*
 		remove first element, place it at the back
 		*/
+		if (m_stack.empty())
+			m_error = true;
 		double front = m_stack.front();
 		m_stack.pop_front();
 		m_stack.push_back(front);
