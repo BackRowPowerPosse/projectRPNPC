@@ -317,6 +317,7 @@ namespace BRPP_CALC
 						break;
 					case 'p':
 						recordProgram();
+						break;
 					case 'x':
 						m_on = false;
 						break;
@@ -526,6 +527,7 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::clearEntry()
 	{
+
 		m_stack.pop_front();
 	} 
 
@@ -983,8 +985,8 @@ namespace BRPP_CALC
 	{
 		int lineNum = 0;
 		string temp;
-		size_t found_p = string::npos;
-		size_t found_P = string::npos;
+		size_t found_p = string::npos; //value returned from find() if not 
+		size_t found_P = string::npos; //found. is equal to -1
 		do
 		{
 			cout << lineNum++ << ">";
@@ -994,13 +996,18 @@ namespace BRPP_CALC
 			if (found_p != -1)
 				temp.erase(found_p);
 			if (found_P != -1)
-				temp.erase(found_P);	
-			m_program.push_back(temp);
+				temp.erase(found_P);
+
+			if (!temp.empty())
+			{
+				m_program.push_back(temp);
+			}
 		} while (found_p == -1 &&
 			found_P == -1);
 		system("cls");
 		printMenu(cout);
-	} 
+		cout << m_stack.front();
+	}
 
 //----------------------------------------------------------------------------
 //	Class:
@@ -1122,7 +1129,21 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::runProgram()
 	{
-	//while m_on.....
+		/*
+		for each input in m_program
+			add to m_interStream
+			call input()
+		*/
+		list<string>::iterator pit = m_program.begin();
+
+		while (pit!=m_program.end())
+		{
+			m_instrStream.clear();
+			m_instrStream.str(*pit);
+			input(m_instrStream);
+			pit++;
+		}
+
 	} 
 
 //----------------------------------------------------------------------------
