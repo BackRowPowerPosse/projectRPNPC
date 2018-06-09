@@ -314,6 +314,7 @@ namespace BRPP_CALC
 						recordProgram();
 					case 'x':
 						m_on = false;
+						break;
 					case '+':
 						add();
 						break;
@@ -335,7 +336,7 @@ namespace BRPP_CALC
 					default:
 						//not valid command
 						m_error = true;
-						cout << "Uknown command";
+						cout << "Unknown command";
 						break;
 					}
 			}

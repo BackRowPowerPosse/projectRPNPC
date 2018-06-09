@@ -47,6 +47,7 @@ int main()
 	cout << endl;
 	cout << "Press \"Enter\" to finish";
 	cin.get();
+	cin.get();
 	
 
 	return EXIT_SUCCESS;
