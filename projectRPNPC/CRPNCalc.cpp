@@ -761,7 +761,6 @@ namespace BRPP_CALC
 			cout << "<<error>>";
 			system("cls");
 			printMenu(cout);
-			cout << m_stack.front;
 		}
 		else
 		{
@@ -770,7 +769,6 @@ namespace BRPP_CALC
 			inFile.close();
 			system("cls");
 			printMenu(cout);
-			cout << m_stack.front;
 		}
 			
 	}  
@@ -1026,7 +1024,6 @@ namespace BRPP_CALC
 			found_P == -1);
 		system("cls");
 		printMenu(cout);
-		cout << m_stack.front();
 	} 
 
 //----------------------------------------------------------------------------
