@@ -1017,8 +1017,11 @@ namespace BRPP_CALC
 			if (found_p != -1)
 				temp.erase(found_p);
 			if (found_P != -1)
-				temp.erase(found_P);	
-			m_program.push_back(temp);
+				temp.erase(found_P);
+			if (!temp.empty()) // If p or P was on its own line
+			{
+				m_program.push_back(temp);
+			}
 		} while (found_p == -1 &&
 			found_P == -1);
 		system("cls");

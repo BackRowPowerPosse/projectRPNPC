@@ -43,7 +43,7 @@ using namespace BRPP_CALC;
 int main()
 {
 	CRPNCalc myCalc;
-
+	
 	cout << endl;
 	cout << "Press \"Enter\" to finish";
 	cin.get();
