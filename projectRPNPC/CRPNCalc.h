@@ -101,6 +101,7 @@ namespace BRPP_CALC
 		void clearAll();
 		void divide();
 		void exp();
+		void sqrt();
 		void getReg(int reg);
 		void loadProgram();
 		void mod();

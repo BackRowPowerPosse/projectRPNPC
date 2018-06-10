@@ -351,9 +351,10 @@ namespace BRPP_CALC
 			{
 				//check for register/clear entry
 
-
 				if (inputString.front() == 'c' && inputString.back() == 'e')
 					clearEntry();
+				if (inputString.front() == 's' && inputString.back() == 'q')
+					sqrt();
 
 				if ((isalpha(inputString.front())) && isdigit(inputString.back()))
 				{
@@ -362,11 +363,11 @@ namespace BRPP_CALC
 					case 's':
 						//setreg
 						cout << "Set reg....";
-						setReg(inputString.back());
+						setReg(static_cast<int>(inputString.back() - '0'));
 						break;
 					case 'g':
 						cout << "Get reg...";
-						getReg(inputString.back());
+						getReg(static_cast<int>(inputString.back() - '0'));
 						break;
 					default:
 						cout << "Unknown command";
@@ -663,11 +664,6 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::exp()
 	{
-		/*
-		if numTwo is 0,
-		set m_error = true;
-		(cannot divide or mod by 0, causes undefined behavior)
-		*/
 		double numOne;
 		double numTwo;
 		/*
@@ -677,8 +673,64 @@ namespace BRPP_CALC
 		binary_prep(numOne, numTwo);
 
 		if (!m_error)
-			m_stack.push_front(pow(numOne, numTwo));
-	}  
+			m_stack.push_front(powf(numOne, numTwo));
+	}
+	//----------------------------------------------------------------------------
+	//	Class:
+	//		CRPNCalc
+	//
+	//	Method:
+	//		sqrt()
+	//
+	//	Description:
+	//		If possible, pops a single element from the stack, finds the result of
+	//		first number sqrt, and pushes the result onto the
+	//		stack.
+	//
+	//	Input:
+	//		None
+	//
+	//	Output:
+	//		None
+	//
+	//	Calls:
+	//		N/A
+	//
+	//	Called By:
+	//		N/A
+	//
+	//	Parameters:
+	//		None
+	//
+	//	Returns:
+	//		None
+	//
+	//	History Log:
+	//		N/A
+	//
+	//----------------------------------------------------------------------------
+	void CRPNCalc::sqrt()
+	{
+		/*
+		if numTwo is 0,
+		set m_error = true;
+		(cannot sqrt <= 0, causes undefined behavior)
+		*/
+		double numOne;
+		/*
+		call unary_prep()
+		check for m_error
+		*/
+		unary_prep(numOne);
+
+		if (numOne <= 0)
+		{
+			m_error = true;
+			cout << "Non-real number";
+		}
+		if (!m_error)
+			m_stack.push_front(sqrtf(numOne));
+	}
 
 //----------------------------------------------------------------------------
 //	Class:
@@ -751,7 +803,26 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::loadProgram()
 	{
-		
+		string temp;
+		ifstream inFile;
+
+		cout << "Enter name of file to load: ";
+		cin >> temp;
+		inFile.open(temp);
+		if (!inFile) // file was not opened correctly
+		{
+			cout << "<<error>>";
+			system("cls");
+			printMenu(cout);
+		}
+		else
+		{
+			while (getline(inFile, temp))
+				m_program.push_back(temp);
+			inFile.close();
+			system("cls");
+			printMenu(cout);
+		}
 	}  
 
 //----------------------------------------------------------------------------
@@ -1006,7 +1077,7 @@ namespace BRPP_CALC
 			found_P == -1);
 		system("cls");
 		printMenu(cout);
-		cout << m_stack.front();
+		//cout << m_stack.front();
 	}
 
 //----------------------------------------------------------------------------
