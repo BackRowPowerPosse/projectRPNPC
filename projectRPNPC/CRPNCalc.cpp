@@ -746,6 +746,7 @@ namespace BRPP_CALC
 //	History Log:
 //		6/8/2018 CS updated
 //		6/8/2018 AS updated
+//      6/9/2018 CS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::loadProgram()
 	{
@@ -755,11 +756,21 @@ namespace BRPP_CALC
 		cout << "Enter name of file to load: ";
 		cin >> temp;
 		inFile.open(temp);
-
-		while (getline(inFile, temp))
-			m_program.push_back(temp);
-
-		inFile.close();
+		if (!inFile) // file was not opened correctly
+		{
+			cout << "<<error>>";
+			system("cls");
+			printMenu(cout);
+		}
+		else
+		{
+			while (getline(inFile, temp))
+				m_program.push_back(temp);
+			inFile.close();
+			system("cls");
+			printMenu(cout);
+		}
+			
 	}  
 
 //----------------------------------------------------------------------------
@@ -986,8 +997,8 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		6/6/2018
-//
+//		6/6/2018 CS updated
+//		6/9/2018 CS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::recordProgram()
 	{
@@ -1004,8 +1015,11 @@ namespace BRPP_CALC
 			if (found_p != -1)
 				temp.erase(found_p);
 			if (found_P != -1)
-				temp.erase(found_P);	
-			m_program.push_back(temp);
+				temp.erase(found_P);
+			if (!temp.empty()) // If p or P was on its own line
+			{
+				m_program.push_back(temp);
+			}
 		} while (found_p == -1 &&
 			found_P == -1);
 		system("cls");
@@ -1162,8 +1176,8 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		CS updated 6/6/2018
-//
+//	    6/6/2018 CS updated
+//      6/9/2018 CS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::saveToFile()
 	{
@@ -1178,6 +1192,10 @@ namespace BRPP_CALC
 			m_program.pop_front();
 		}
 		outFile.close();
+		system("cls");
+		printMenu(cout);
+		cout << m_stack.front();
+		
 	}  
 
 //----------------------------------------------------------------------------
