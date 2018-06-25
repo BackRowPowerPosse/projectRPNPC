@@ -528,8 +528,8 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::clearEntry()
 	{
-
-		m_stack.pop_front();
+		if (!m_stack.empty())
+			m_stack.pop_front();
 	} 
 
 //----------------------------------------------------------------------------
@@ -798,8 +798,9 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		N/A
-//
+//		6/8/2018 CS updated
+//		6/8/2018 AS updated
+//      6/9/2018 CS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::loadProgram()
 	{
@@ -823,6 +824,7 @@ namespace BRPP_CALC
 			system("cls");
 			printMenu(cout);
 		}
+			
 	}  
 
 //----------------------------------------------------------------------------
@@ -1049,8 +1051,8 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		6/6/2018
-//
+//		6/6/2018 CS updated
+//		6/9/2018 CS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::recordProgram()
 	{
@@ -1246,15 +1248,14 @@ namespace BRPP_CALC
 //		None
 //
 //	History Log:
-//		CS updated 6/6/2018
-//
+//	    6/6/2018 CS updated
+//      6/9/2018 CS updated
 //----------------------------------------------------------------------------
 	void CRPNCalc::saveToFile()
 	{
 		string temp;
-		cout << "Enter filename of saved program: ";
+		cout << "Save program file as: ";
 		cin >> temp;
-		temp = temp.append(".txt");
 		ofstream outFile;
 		outFile.open(temp);
 		while (!m_program.empty())
@@ -1263,6 +1264,10 @@ namespace BRPP_CALC
 			m_program.pop_front();
 		}
 		outFile.close();
+		system("cls");
+		printMenu(cout);
+		cout << m_stack.front();
+		
 	}  
 
 //----------------------------------------------------------------------------
