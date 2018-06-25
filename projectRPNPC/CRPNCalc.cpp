@@ -155,7 +155,7 @@ namespace BRPP_CALC
 		{
 			system("cls");
 			print(cout);
-			input(cin);
+         	cin >> *this;
 		}
 	} 
 
@@ -259,120 +259,123 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::parse()
 	{
-		string input = m_instrStream.str();
-
 		/*
 		check if  is a number
 		if not a number:
-			check for all possible commands
+		check for all possible commands
 		*/
 		string inputString = m_instrStream.str();
 		m_error = false;
-		string numberInput;
-		string commandInput;
-		string::iterator sit = inputString.begin();
-		while (sit != inputString.end())
-		{
-			//check for negative
+		bool number;
 
-			while (isdigit(*sit))
-			{
-				numberInput.push_back(*sit);
-			}
-			double number;
-			stringstream input(numberInput);
-			input >> number;
-			m_stack.push_front(number);
-			//check for commands
+		try
+		{
+			m_stack.push_front(stod(inputString));
+			number = true;
+		}
+		catch (const std::exception&)
+		{
+			//input is not a number
+			number = false;
+		}
+
+		//check for commands
+		if (number == false)
+		{
+
 			if (inputString.length() == 1)
 			{
-				while (isalpha(*sit))
-				{
-					commandInput.push_back(*sit);
-				}
-				char command = commandInput.front();
-				switch (tolower(command))
-				{
-				case 'c':
-					//clear stack
-					cout << "Clearing stack...";
-					clearAll();
-					break;
-				case 'd':
-					cout << "Rotating stack down...";
-					rotateDown();
-					break;
-				case 'f':
-					saveToFile();
-					break;
-				case 'h':
-					m_helpOn = true;
-					break;
-				case 'l':
-					loadProgram();
-					break;
-				case 'r':
-					runProgram();
-					break;
-				case 'm':
-					neg();
-					break;
-				case 'p':
-					recordProgram();
-				case 'x':
-					m_on = false;
-				case '+':
-					add();
-					break;
-				case '-':
-					subtract();
-				case '/':
-					divide();
-					break;
-				case '*':
-					multiply();
-					break;
-				case '%':
-					mod();
-					break;
-				case '^':
-					exp();
-					break;
-				default:
-					//not valid
-					break;
-				}
+					switch (tolower(inputString.front()))
+					{
+					case 'c':
+						//clear stack
+						cout << "Clearing stack...";
+						clearAll();
+						break;
+					case 'd':
+						cout << "Rotating stack down...";
+						rotateDown();
+						break;
+					case 'u':
+						cout << "Rotating stack up.";
+						rotateUp();
+						break;
+					case 'f':
+						saveToFile();
+						break;
+					case 'h':
+						m_helpOn = true;
+						break;
+					case 'l':
+						loadProgram();
+						break;
+					case 'r':
+						runProgram();
+						break;
+					case 'm':
+						neg();
+						break;
+					case 'p':
+						recordProgram();
+						break;
+					case 'x':
+						m_on = false;
+						break;
+					case '+':
+						add();
+						break;
+					case '-':
+						subtract();
+						break;
+					case '/':
+						divide();
+						break;
+					case '*':
+						multiply();
+						break;
+					case '%':
+						mod();
+						break;
+					case '^':
+						exp();
+						break;
+					default:
+						//not valid command
+						m_error = true;
+						cout << "Unknown command";
+						break;
+					}
 			}
 			//check for operators
-			if (inputString.length == 2)
+			else if (inputString.length() == 2)
 			{
-				int numberCommand;
 				//check for register/clear entry
-				while (isalpha(*sit))
+
+				if (inputString.front() == 'c' && inputString.back() == 'e')
+					clearEntry();
+				if (inputString.front() == 's' && inputString.back() == 'q')
+					sqrt();
+
+				if ((isalpha(inputString.front())) && isdigit(inputString.back()))
 				{
-					commandInput.push_back(*sit);
+					switch (tolower(inputString.front()))
+					{
+					case 's':
+						//setreg
+						cout << "Set reg....";
+						setReg(static_cast<int>(inputString.back() - '0'));
+						break;
+					case 'g':
+						cout << "Get reg...";
+						getReg(static_cast<int>(inputString.back() - '0'));
+						break;
+					default:
+						cout << "Unknown command";
+						m_error = true;
+						break;
+					}
 				}
-				if (isdigit(*sit))
-				{
-					numberInput.push_back(*sit);
-					stringstream input(numberInput);
-					input >> numberCommand;
-				}
-				char command = commandInput.front();
-				switch (tolower(command))
-				{
-				case 's':
-					//setreg
-					cout << "Set reg....";
-					setReg(numberCommand);
-					break;
-				case 'g':
-					cout << "Get reg...";
-					getReg(numberCommand);
-					break;
-				default:
-					break;
-				}
+
 			}
 		}
 	}
@@ -661,11 +664,6 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::exp()
 	{
-		/*
-		if numTwo is 0,
-		set m_error = true;
-		(cannot divide or mod by 0, causes undefined behavior)
-		*/
 		double numOne;
 		double numTwo;
 		/*
@@ -675,8 +673,64 @@ namespace BRPP_CALC
 		binary_prep(numOne, numTwo);
 
 		if (!m_error)
-			m_stack.push_front(pow(numOne, numTwo));
-	}  
+			m_stack.push_front(powf(numOne, numTwo));
+	}
+	//----------------------------------------------------------------------------
+	//	Class:
+	//		CRPNCalc
+	//
+	//	Method:
+	//		sqrt()
+	//
+	//	Description:
+	//		If possible, pops a single element from the stack, finds the result of
+	//		first number sqrt, and pushes the result onto the
+	//		stack.
+	//
+	//	Input:
+	//		None
+	//
+	//	Output:
+	//		None
+	//
+	//	Calls:
+	//		N/A
+	//
+	//	Called By:
+	//		N/A
+	//
+	//	Parameters:
+	//		None
+	//
+	//	Returns:
+	//		None
+	//
+	//	History Log:
+	//		N/A
+	//
+	//----------------------------------------------------------------------------
+	void CRPNCalc::sqrt()
+	{
+		/*
+		if numTwo is 0,
+		set m_error = true;
+		(cannot sqrt <= 0, causes undefined behavior)
+		*/
+		double numOne;
+		/*
+		call unary_prep()
+		check for m_error
+		*/
+		unary_prep(numOne);
+
+		if (numOne <= 0)
+		{
+			m_error = true;
+			cout << "Non-real number";
+		}
+		if (!m_error)
+			m_stack.push_front(sqrtf(numOne));
+	}
 
 //----------------------------------------------------------------------------
 //	Class:
@@ -1016,7 +1070,8 @@ namespace BRPP_CALC
 				temp.erase(found_p);
 			if (found_P != -1)
 				temp.erase(found_P);
-			if (!temp.empty()) // If p or P was on its own line
+
+			if (!temp.empty())
 			{
 				m_program.push_back(temp);
 			}
@@ -1024,7 +1079,8 @@ namespace BRPP_CALC
 			found_P == -1);
 		system("cls");
 		printMenu(cout);
-	} 
+		//cout << m_stack.front();
+	}
 
 //----------------------------------------------------------------------------
 //	Class:
@@ -1063,6 +1119,8 @@ namespace BRPP_CALC
 		/*
 		remove first element, place it at the back
 		*/
+		if (m_stack.empty())
+			m_error = true;
 		double front = m_stack.front();
 		m_stack.pop_front();
 		m_stack.push_back(front);
@@ -1144,7 +1202,21 @@ namespace BRPP_CALC
 //----------------------------------------------------------------------------
 	void CRPNCalc::runProgram()
 	{
-	//while m_on.....
+		/*
+		for each input in m_program
+			add to m_interStream
+			call input()
+		*/
+		list<string>::iterator pit = m_program.begin();
+
+		while (pit!=m_program.end())
+		{
+			m_instrStream.clear();
+			m_instrStream.str(*pit);
+			input(m_instrStream);
+			pit++;
+		}
+
 	} 
 
 //----------------------------------------------------------------------------
